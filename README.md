@@ -1,2 +1,2 @@
-# MysQL Basic commands
+# MySQL Basic commands
 
