@@ -1,0 +1,1210 @@
+--Create database
+create database SQL_Practice;
+
+--Create table
+create table Students( ID int, Name varchar(20), Marks double, Course varchar(20), Fees int);
+
+--Insert values
+insert into Students values(101,'John',84,'BCom',25000);
+insert into Students values(102,'Rob',70,'BSc',36000);
+insert into Students values(103,'Sansa',91,'BA',12000);
+insert into Students values(104,'Bran',88,'BE',55000);
+insert into Students values(105,'Arya',64,'MBA',666000);
+insert into Students values(106,'Cersi',98,'MBBS',788800);
+insert into Students values(107,'Tyrion',97,'MBA',888844);
+
+--Shwing evrry column
+select * from Students;
+
++------+--------+-------+--------+--------+
+| ID   | Name   | Marks | Course | Fees   |
++------+--------+-------+--------+--------+
+|  101 | John   |    84 | BCom   |  25000 |
+|  102 | Rob    |    70 | BSc    |  36000 |
+|  103 | Sansa  |    91 | BA     |  12000 |
+|  104 | Bran   |    88 | BE     |  55000 |
+|  105 | Arya   |    64 | MBA    | 666000 |
+|  106 | Cersi  |    98 | MBBS   | 788800 |
+|  107 | Tyrion |    97 | MBA    | 888844 |
++------+--------+-------+--------+--------+
+
+--Printing rows specified
+select * from Students where ID in(101,105);
++------+------+-------+--------+--------+
+| ID   | Name | Marks | Course | Fees   |
++------+------+-------+--------+--------+
+|  101 | John |    84 | BCom   |  25000 |
+|  105 | Arya |    64 | MBA    | 666000 |
++------+------+-------+--------+--------+
+
+--Printing rows for specific range entered
+select * from Students where ID between 103 and 107;
+
++------+--------+-------+--------+--------+
+| ID   | Name   | Marks | Course | Fees   |
++------+--------+-------+--------+--------+
+|  103 | Sansa  |    91 | BA     |  12000 |
+|  104 | Bran   |    88 | BE     |  55000 |
+|  105 | Arya   |    64 | MBA    | 666000 |
+|  106 | Cersi  |    98 | MBBS   | 788800 |
+|  107 | Tyrion |    97 | MBA    | 888844 |
++------+--------+-------+--------+--------+
+
+--Distinct (Does not include duplicate values shows only one copy of that value)
+select distinct Name, Marks from Students;
++--------+-------+
+| Name   | Marks |
++--------+-------+
+| John   |    84 |
+| Rob    |    70 |
+| Sansa  |    91 |
+| Bran   |    88 |
+| Arya   |    64 |
+| Cersi  |    98 |
+| Tyrion |    97 |
++--------+-------+
+
+--Alias (makes alias for our selected column,table for a short time)
+select ID as StudentID from Students;
++-----------+
+| StudentID |
++-----------+
+|       101 |
+|       102 |
+|       103 |
+|       104 |
+|       105 |
+|       106 |
+|       107 |
++-----------+
+
+--Creating cutomers tables
+create table Customers(CustomerID int, CustomerName varchar(20), City varchar(20), PinCode int, County varchar(20));
+
+--Desc (Descritption of scehma)
+desc Customers;
+insert into Customers values(111, 'Dalton','Mumbai', 400060,'India');
+insert into Customers values(112, 'Zeus','Mumbai', 400065,'India');
+insert into Customers values(113, 'Emery','Delhi', 654652,'India');
+insert into Customers values(114, 'Drake','Kolkata', 235556,'India');
+insert into Customers values(115, 'Thor','Gurgaon', 105545,'India');
+insert into Customers values(116, 'Jameson','Delhi', 600065,'India');
+
+--Change colunmn name 
+alter table Customers change County Country varchar(20);
+
+--Concat
+select CustomerID, CustomerName, concat(City, PinCode, Country) as Full_Add from Customers;
+
++------------+--------------+--------------------+
+| CustomerID | CustomerName | Full_Add           |
++------------+--------------+--------------------+
+|        111 | Dalton       | Mumbai400060India  |
+|        112 | Zeus         | Mumbai400065India  |
+|        113 | Emery        | Delhi654652India   |
+|        114 | Drake        | Kolkata235556India |
+|        115 | Thor         | Gurgaon105545India |
+|        116 | Jameson      | Delhi600065India   |
++------------+--------------+--------------------+
+
+--Copy another tbale while creating new table
+create table Customers2(select * from Customers); 
+select * from Customers2;
++------------+--------------+---------+---------+---------+
+| CustomerID | CustomerName | City    | PinCode | Country |
++------------+--------------+---------+---------+---------+
+|        111 | Dalton       | Mumbai  |  400060 | India   |
+|        112 | Zeus         | Mumbai  |  400065 | India   |
+|        113 | Emery        | Delhi   |  654652 | India   |
+|        114 | Drake        | Kolkata |  235556 | India   |
+|        115 | Thor         | Gurgaon |  105545 | India   |
+|        116 | Jameson      | Delhi   |  600065 | India   |
++------------+--------------+---------+---------+---------+
+
+--Creating orders table
+create table Orders(OrderID int, OrderDate varchar(20), CustomerID int);
+
+insert into Orders values(54556, '20-5-2009',112);
+insert into Orders values(54566, '20-5-2019',115);
+select * from Orders;
++---------+-----------+------------+
+| OrderID | OrderDate | CustomerID |
++---------+-----------+------------+
+|   54556 | 20-5-2009 |        112 |
+|   54566 | 20-5-2019 |        115 |
++---------+-----------+------------+
+
+--update values
+update Orders set CustomerID= 116 where OrderID = 54566;
+select * from Orders;
++---------+-----------+------------+
+| OrderID | OrderDate | CustomerID |
++---------+-----------+------------+
+|   54556 | 20-5-2009 |        112 |
+|   54566 | 20-5-2019 |        116 |
++---------+-----------+------------+
+
+insert into Orders values(78798, '12-6-2011',122);
+insert into Orders values(45466, '30-12-2020',114);
+insert into Orders values(88984, '14-4-2013',111);
+
+
+--JOINS
+--INNER JOIN (Only prints the common CustomerID  forom both the tables)
+
+select * from Customers inner join Orders where Customers.CustomerID=Orders.CustomerID;
+OR
+select * from Customers inner join Orders on Customers.CustomerID=Orders.CustomerID;
++------------+--------------+---------+---------+---------+---------+------------+------------+
+| CustomerID | CustomerName | City    | PinCode | Country | OrderID | OrderDate  | CustomerID |
++------------+--------------+---------+---------+---------+---------+------------+------------+
+|        111 | Dalton       | Mumbai  |  400060 | India   |   88984 | 14-4-2013  |        111 |
+|        112 | Zeus         | Mumbai  |  400065 | India   |   54556 | 20-5-2009  |        112 |
+|        114 | Drake        | Kolkata |  235556 | India   |   45466 | 30-12-2020 |        114 |
+|        116 | Jameson      | Delhi   |  600065 | India   |   54566 | 20-5-2019  |        116 |
++------------+--------------+---------+---------+---------+---------+------------+------------+
+
+--Left Join(The LEFT JOIN keyword returns all records from the left table (table1), and the matched records from the right table (table2). The result is NULL from the right side, if there is no match.)
+select * from Customers left join Orders on Customers.CustomerID= Orders.CustomerID;
++------------+--------------+---------+---------+---------+---------+------------+------------+
+| CustomerID | CustomerName | City    | PinCode | Country | OrderID | OrderDate  | CustomerID |
++------------+--------------+---------+---------+---------+---------+------------+------------+
+|        112 | Zeus         | Mumbai  |  400065 | India   |   54556 | 20-5-2009  |        112 |
+|        116 | Jameson      | Delhi   |  600065 | India   |   54566 | 20-5-2019  |        116 |
+|        114 | Drake        | Kolkata |  235556 | India   |   45466 | 30-12-2020 |        114 |
+|        111 | Dalton       | Mumbai  |  400060 | India   |   88984 | 14-4-2013  |        111 |
+|        113 | Emery        | Delhi   |  654652 | India   |    NULL | NULL       |       NULL |
+|        115 | Thor         | Gurgaon |  105545 | India   |    NULL | NULL       |       NULL |
++------------+--------------+---------+---------+---------+---------+------------+------------+
+
+--Right join(The RIGHT JOIN keyword returns all records from the right table (table2), and the matched records from the left table (table1). The result is NULL from the left side, when there is no match.)
+select * from Customers right join Orders on Customers.CustomerID = Orders.CustomerID;
++------------+--------------+---------+---------+---------+---------+------------+------------+
+| CustomerID | CustomerName | City    | PinCode | Country | OrderID | OrderDate  | CustomerID |
++------------+--------------+---------+---------+---------+---------+------------+------------+
+|        111 | Dalton       | Mumbai  |  400060 | India   |   88984 | 14-4-2013  |        111 |
+|        112 | Zeus         | Mumbai  |  400065 | India   |   54556 | 20-5-2009  |        112 |
+|        114 | Drake        | Kolkata |  235556 | India   |   45466 | 30-12-2020 |        114 |
+|        116 | Jameson      | Delhi   |  600065 | India   |   54566 | 20-5-2019  |        116 |
+|       NULL | NULL         | NULL    |    NULL | NULL    |   78798 | 12-6-2011  |        122 |
++------------+--------------+---------+---------+---------+---------+------------+------------+
+
+--cross join
+select * from Customers cross join Orders;
++------------+--------------+---------+---------+---------+---------+------------+------------+
+| CustomerID | CustomerName | City    | PinCode | Country | OrderID | OrderDate  | CustomerID |
++------------+--------------+---------+---------+---------+---------+------------+------------+
+|        111 | Dalton       | Mumbai  |  400060 | India   |   54556 | 20-5-2009  |        112 |
+|        111 | Dalton       | Mumbai  |  400060 | India   |   54566 | 20-5-2019  |        116 |
+|        111 | Dalton       | Mumbai  |  400060 | India   |   78798 | 12-6-2011  |        122 |
+|        111 | Dalton       | Mumbai  |  400060 | India   |   45466 | 30-12-2020 |        114 |
+|        111 | Dalton       | Mumbai  |  400060 | India   |   88984 | 14-4-2013  |        111 |
+|        112 | Zeus         | Mumbai  |  400065 | India   |   54556 | 20-5-2009  |        112 |
+|        112 | Zeus         | Mumbai  |  400065 | India   |   54566 | 20-5-2019  |        116 |
+|        112 | Zeus         | Mumbai  |  400065 | India   |   78798 | 12-6-2011  |        122 |
+|        112 | Zeus         | Mumbai  |  400065 | India   |   45466 | 30-12-2020 |        114 |
+|        112 | Zeus         | Mumbai  |  400065 | India   |   88984 | 14-4-2013  |        111 |
+|        113 | Emery        | Delhi   |  654652 | India   |   54556 | 20-5-2009  |        112 |
+|        113 | Emery        | Delhi   |  654652 | India   |   54566 | 20-5-2019  |        116 |
+|        113 | Emery        | Delhi   |  654652 | India   |   78798 | 12-6-2011  |        122 |
+|        113 | Emery        | Delhi   |  654652 | India   |   45466 | 30-12-2020 |        114 |
+|        113 | Emery        | Delhi   |  654652 | India   |   88984 | 14-4-2013  |        111 |
+|        114 | Drake        | Kolkata |  235556 | India   |   54556 | 20-5-2009  |        112 |
+|        114 | Drake        | Kolkata |  235556 | India   |   54566 | 20-5-2019  |        116 |
+|        114 | Drake        | Kolkata |  235556 | India   |   78798 | 12-6-2011  |        122 |
+|        114 | Drake        | Kolkata |  235556 | India   |   45466 | 30-12-2020 |        114 |
+|        114 | Drake        | Kolkata |  235556 | India   |   88984 | 14-4-2013  |        111 |
+|        115 | Thor         | Gurgaon |  105545 | India   |   54556 | 20-5-2009  |        112 |
+|        115 | Thor         | Gurgaon |  105545 | India   |   54566 | 20-5-2019  |        116 |
+|        115 | Thor         | Gurgaon |  105545 | India   |   78798 | 12-6-2011  |        122 |
+|        115 | Thor         | Gurgaon |  105545 | India   |   45466 | 30-12-2020 |        114 |
+|        115 | Thor         | Gurgaon |  105545 | India   |   88984 | 14-4-2013  |        111 |
+|        116 | Jameson      | Delhi   |  600065 | India   |   54556 | 20-5-2009  |        112 |
+|        116 | Jameson      | Delhi   |  600065 | India   |   54566 | 20-5-2019  |        116 |
+|        116 | Jameson      | Delhi   |  600065 | India   |   78798 | 12-6-2011  |        122 |
+|        116 | Jameson      | Delhi   |  600065 | India   |   45466 | 30-12-2020 |        114 |
+|        116 | Jameson      | Delhi   |  600065 | India   |   88984 | 14-4-2013  |        111 |
++------------+--------------+---------+---------+---------+---------+------------+------------+
+
+--Create tables employees
+create table Employees(EmpID int, EmpName varchar(20));
+
+--insert multiple values in table
+insert into Employees values(101, 'Dave'), (102, 'Frank'), (103,'Linus');
+ select * from Employees;
++-------+---------+
+| EmpID | EmpName |
++-------+---------+
+|   101 | Dave    |
+|   102 | Frank   |
+|   103 | Linus   |
++-------+---------+
+
+--add column
+alter table Employees add column ManagerID int;
+select * from Employees;
++-------+---------+-----------+
+| EmpID | EmpName | ManagerID |
++-------+---------+-----------+
+|   101 | Dave    |      NULL |
+|   102 | Frank   |      NULL |
+|   103 | Linus   |      NULL |
++-------+---------+-----------+
+
+--Malking Linus manager to Dave and Frank
+--update values as specific rows
+update Employess set ManagerID = 103 where EmpID in(101,102);
+select * from Employees;
++-------+---------+-----------+
+| EmpID | EmpName | ManagerID |
++-------+---------+-----------+
+|   101 | Dave    |       103 |
+|   102 | Frank   |       103 |
+|   103 | Linus   |      NULL |
++-------+---------+-----------+
+
+--self join (A self JOIN is a regular join, but the table is joined with itself.)
+select e.EmpID, e.EmpName, m.EmpName  from Employees e inner join Employees m where e.EmpID = m.EmpID;
+OR
+select Emp.EmpID, Emp.EmpName, Man.EmpName from Employees Emp inner join Employees Man where Emp.ManagerID =Man.EmpID;
++-------+---------+---------+
+| EmpID | EmpName | EmpName |
++-------+---------+---------+
+|   101 | Dave    | Linus   |
+|   102 | Frank   | Linus   |
++-------+---------+---------+
+
+--Creaitng Person Tables
+create table Person(ID int not null, FName varchar(20) not null, LName varchar(20) not null, Age int);
+desc Person;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| ID    | int         | NO   |     | NULL    |       |
+| FName | varchar(20) | NO   |     | NULL    |       |
+| LName | varchar(20) | NO   |     | NULL    |       |
+| Age   | int         | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+
+--Inserting values into Person;
+--Add into specific columns
+insert into Person(ID, FName,LName) values(101,'John','Snow');
+
+select * from Person;
++-----+-------+-------+------+
+| ID  | FName | LName | Age  |
++-----+-------+-------+------+
+| 101 | John  | Snow  | NULL |
++-----+-------+-------+------+
+
+insert into Person(ID, FName) values(102,'John');
+insert into Person(ID, FName) values(102,'John');
+ERROR 1364 (HY000): Field 'LName' doesn't have a default value
+--bcause the LName is declared not null that's why we are getting this ERROR
+
+
+--Truncate table (removing all the values)
+truncate table Person;
+select * from Person;
+Empty set (0.00 sec)
+
+--Changing the contraint of Age column to not null
+alter table Person modify Age int not null;
+
+desc Person;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| ID    | int         | NO   |     | NULL    |       |
+| FName | varchar(20) | NO   |     | NULL    |       |
+| LName | varchar(20) | NO   |     | NULL    |       |
+| Age   | int         | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+--Adding unique key constraint while creating tbale
+create table Person2(ID int , FName varchar(20) not null, LName varchar(20) not null, Age int, Email varchar(20), constraint Uni_ID unique(ID) );
+desc Person2;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| ID    | int         | YES  | UNI | NULL    |       |
+| FName | varchar(20) | NO   |     | NULL    |       |
+| LName | varchar(20) | NO   |     | NULL    |       |
+| Age   | int         | YES  |     | NULL    |       |
+| Email | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+
+--Adding contriant after creating a table
+alter table Person2 add constraint Uni_Email unique(Email);
+desc Person2;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| ID    | int         | YES  | UNI | NULL    |       |
+| FName | varchar(20) | NO   |     | NULL    |       |
+| LName | varchar(20) | NO   |     | NULL    |       |
+| Age   | int         | YES  |     | NULL    |       |
+| Email | varchar(20) | YES  | UNI | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+
+--Ading multiple columns in constraint
+create table Person2(ID int , FName varchar(20) not null, LName varchar(20) not null, Age int, Email varchar(20), constraint Uni_ID unique(ID, Email) );
+mysql> desc Person2;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| ID    | int         | YES  | MUL | NULL    |       |
+| FName | varchar(20) | NO   |     | NULL    |       |
+| LName | varchar(20) | NO   |     | NULL    |       |
+| Age   | int         | YES  |     | NULL    |       |
+| Email | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+
+--dropping constaint 
+alter table Person2 drop index Uni_ID;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+alter table Person2 drop index Uni_Email;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+--Create table person3
+create table person3(ID int primary key, Fname varchar(20) not null, Lname varchar(20) not null, Age int);
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> desc Person3
+    -> ;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| ID    | int         | NO   | PRI | NULL    |       |
+| Fname | varchar(20) | NO   |     | NULL    |       |
+| Lname | varchar(20) | NO   |     | NULL    |       |
+| Age   | int         | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+
+--Inserting value in table
+insert into Person3 values(101, 'User 1', 'Lname 1', 22);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from Person3;
++-----+--------+---------+------+
+| ID  | Fname  | Lname   | Age  |
++-----+--------+---------+------+
+| 101 | User 1 | Lname 1 |   22 |
++-----+--------+---------+------+
+
+--ID is primary key that's why it is not accepting duplicate values
+insert into Person3 values(101, 'User 1', 'Lname 1', 22);
+ERROR 1062 (23000): Duplicate entry '101' for key 'person3.PRIMARY'
+
+--Drop primary key
+alter table Person3 drop primary key;
+Query OK, 1 row affected (0.13 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> desc Person3
+    -> ;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| ID    | int         | NO   |     | NULL    |       |
+| Fname | varchar(20) | NO   |     | NULL    |       |
+| Lname | varchar(20) | NO   |     | NULL    |       |
+| Age   | int         | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+
+--now we can add duplicate values
+insert into Person3 values(101, 'User 1', 'Lname 1', 22);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from Person3;
++-----+--------+---------+------+
+| ID  | Fname  | Lname   | Age  |
++-----+--------+---------+------+
+| 101 | User 1 | Lname 1 |   22 |
+| 101 | User 1 | Lname 1 |   22 |
++-----+--------+---------+------+
+
+--Adding primary key while creating table
+create table Person4(ID int, Fname varchar(20),Lname varchar(20), Age int, Email varchar(20),constraint Pk_ID_Email primary key(ID, Email));
+desc person4;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| ID    | int         | NO   | PRI | NULL    |       |
+| Fname | varchar(20) | YES  |     | NULL    |       |
+| Lname | varchar(20) | YES  |     | NULL    |       |
+| Age   | int         | YES  |     | NULL    |       |
+| Email | varchar(20) | NO   | PRI | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+
+insert into Person4 values(1001,'Garry', 'Vee', 40, 'garryvee@gmail.com');
+insert into Person4 values(1002,'Tai', 'Lopez', 42, 'tailopez@gmail.com');
+insert into Person4 values(1003,'Tim', 'Ferris', 45, 'timferris@gmail.com');
+insert into Person4 values(1004,'Darious', 'Forux',32,'dariousf@gmail.com');
+insert into Person4 values(1005,'Robin','Sharma',50,'robins@gmail.com');
+
+mysql> select * from Person4;
++------+---------+--------+------+---------------------+
+| ID   | Fname   | Lname  | Age  | Email               |
++------+---------+--------+------+---------------------+
+| 1001 | Garry   | Vee    |   40 | garryvee@gmail.com  |
+| 1002 | Tai     | Lopez  |   42 | tailopez@gmail.com  |
+| 1003 | Tim     | Ferris |   45 | timferris@gmail.com |
+| 1004 | Darious | Forux  |   32 | dariousf@gmail.com  |
+| 1005 | Robin   | Sharma |   50 | robins@gmail.com    |
++------+---------+--------+------+---------------------+
+5 rows in set (0.00 sec)
+
+--Droppping primary key
+mysql> alter table Person4 drop primary key;
+Query OK, 5 rows affected (0.12 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> desc Person4;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| ID    | int         | NO   |     | NULL    |       |
+| Fname | varchar(20) | YES  |     | NULL    |       |
+| Lname | varchar(20) | YES  |     | NULL    |       |
+| Age   | int         | YES  |     | NULL    |       |
+| Email | varchar(20) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+
+--Add prinmary key constraint after creating table
+
+mysql> alter table Person4 add constraint Pk_ID_Email primary key(ID,Email);
+Query OK, 0 rows affected (0.23 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc Person4;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| ID    | int         | NO   | PRI | NULL    |       |
+| Fname | varchar(20) | YES  |     | NULL    |       |
+| Lname | varchar(20) | YES  |     | NULL    |       |
+| Age   | int         | YES  |     | NULL    |       |
+| Email | varchar(20) | NO   | PRI | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+
+--Taking references forom other tables(foreign key)
+create table OrdersNew(OrderID int primary key, OrderName varchar(20),ID int, constraint foreign key FK_Person4(ID) references Person4(ID));
+
+mysql> create table OrdersNew(OrderID int primary key, OrderName varchar(20),ID int, constraint foreign key FK_Person4(ID) references Person4(ID));
+Query OK, 0 rows affected (0.08 sec)
+mysql> desc OrdersNew;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| OrderID   | int         | NO   | PRI | NULL    |       |
+| OrderName | varchar(20) | YES  |     | NULL    |       |
+| ID        | int         | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+
+--Creaitng  new table 
+create table OrdersNew2(OrderID int primary key, OrderName varchar(20) not null);
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> desc OrdersNew2;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| OrderID   | int         | NO   | PRI | NULL    |       |
+| OrderName | varchar(20) | NO   |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+--Addding column ID
+mysql> alter table OrdersNew2 add column ID int;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc OrdersNew2;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| OrderID   | int         | NO   | PRI | NULL    |       |
+| OrderName | varchar(20) | NO   |     | NULL    |       |
+| ID        | int         | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+
+--Addding foreign key
+alter table OrdersNew2 add constraint foreign key fk_ID(ID) references OrdersNew(ID);
+Query OK, 0 rows affected (0.17 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc OrdersNew2;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| OrderID   | int         | NO   | PRI | NULL    |       |
+| OrderName | varchar(20) | NO   |     | NULL    |       |
+| ID        | int         | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+
+--Default values while creating table
+create table Cities(CityID int primary key, CityName varchar(20) default 'Mumbai', PinCode int);
+desc Cities;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| CityID   | int         | NO   | PRI | NULL    |       |
+| CityName | varchar(20) | YES  |     | Mumbai  |       |
+| PinCode  | int         | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+
+--Adding values without default column , it will by default add Mumbai as a  city
+mysql> insert into Cities(CityID, PinCode) values(101, 400060);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from cities;
++--------+----------+---------+
+| CityID | CityName | PinCode |
++--------+----------+---------+
+|    101 | Mumbai   |  400060 |
++--------+----------+---------+
+
+--Dropping default values
+mysql> alter table Cities alter cityname drop default;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc Cities;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| CityID   | int         | NO   | PRI | NULL    |       |
+| CityName | varchar(20) | YES  |     | NULL    |       |
+| PinCode  | int         | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+
+--Changing default values
+mysql> alter table cities alter Cityname set default 'Delhi';
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc cities;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| CityID   | int         | NO   | PRI | NULL    |       |
+| CityName | varchar(20) | YES  |     | Delhi   |       |
+| PinCode  | int         | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+mysql>
+mysql> insert into cities(CityID, Pincode) values(103,500032);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from cities;
++--------+-----------+---------+
+| CityID | CityName  | PinCode |
++--------+-----------+---------+
+|    101 | Mumbai    |  400060 |
+|    102 | Kandivali |  400066 |
+|    103 | Delhi     |  500032 |
++--------+-----------+---------+
+
+--Union 
+mysql> select * from Customers2;
++------------+--------------+---------+---------+---------+
+| CustomerID | CustomerName | City    | PinCode | Country |
++------------+--------------+---------+---------+---------+
+|        111 | Dalton       | Mumbai  |  400060 | India   |
+|        112 | Zeus         | Mumbai  |  400065 | India   |
+|        113 | Emery        | Delhi   |  654652 | India   |
+|        114 | Drake        | Kolkata |  235556 | India   |
+|        115 | Thor         | Gurgaon |  105545 | India   |
+|        116 | Jameson      | Delhi   |  600065 | India   |
++------------+--------------+---------+---------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select * from Suppliers;
++------------+--------------+----------+
+| SupplierID | SupplierName | City     |
++------------+--------------+----------+
+|        223 | Sup1         | Mumbai   |
+|        224 | Sup2         | Delhi    |
+|        225 | Sup3         | Kolkata  |
+|        226 | Sup4         | Delhi    |
+|        227 | Sup5         | Banglore |
+|         28 | Sup6         | Mumbai   |
++------------+--------------+----------+
+6 rows in set (0.00 sec)
+
+--Union between two tables (Shows common values betweeen two tbale's columnso without dupicate values)
+mysql> select City from Customers2 union select City from Suppliers;
++----------+
+| City     |
++----------+
+| Mumbai   |
+| Delhi    |
+| Kolkata  |
+| Gurgaon  |
+| Banglore |
++----------+
+5 rows in set (0.00 sec)
+
+--Union all between two tables (Shows common values betweeen two tbale's columnso with all duplicate values)
+mysql> select City from Customers2 union all select City from Suppliers;
++----------+
+| City     |
++----------+
+| Mumbai   |
+| Mumbai   |
+| Delhi    |
+| Kolkata  |
+| Gurgaon  |
+| Delhi    |
+| Mumbai   |
+| Delhi    |
+| Kolkata  |
+| Delhi    |
+| Banglore |
+| Mumbai   |
++----------+
+
+--Order by clause
+select * from Students;
++------+--------+-------+--------+--------+
+| ID   | Name   | Marks | Course | Fees   |
++------+--------+-------+--------+--------+
+|  101 | John   |    84 | BCom   |  25000 |
+|  102 | Rob    |    70 | BSc    |  36000 |
+|  103 | Sansa  |    91 | BA     |  12000 |
+|  104 | Bran   |    88 | BE     |  55000 |
+|  105 | Arya   |    64 | MBA    | 666000 |
+|  106 | Cersi  |    98 | MBBS   | 788800 |
+|  107 | Tyrion |    97 | MBA    | 888844 |
++------+--------+-------+--------+--------+
+7 rows in set (0.01 sec)
+
+--Order by(Ascending order)
+mysql> select * from Students order by marks;
++------+--------+-------+--------+--------+
+| ID   | Name   | Marks | Course | Fees   |
++------+--------+-------+--------+--------+
+|  105 | Arya   |    64 | MBA    | 666000 |
+|  102 | Rob    |    70 | BSc    |  36000 |
+|  101 | John   |    84 | BCom   |  25000 |
+|  104 | Bran   |    88 | BE     |  55000 |
+|  103 | Sansa  |    91 | BA     |  12000 |
+|  107 | Tyrion |    97 | MBA    | 888844 |
+|  106 | Cersi  |    98 | MBBS   | 788800 |
++------+--------+-------+--------+--------+
+
+--Order by desc(Descending order)
+ select * from Students order by marks desc;
++------+--------+-------+--------+--------+
+| ID   | Name   | Marks | Course | Fees   |
++------+--------+-------+--------+--------+
+|  106 | Cersi  |    98 | MBBS   | 788800 |
+|  107 | Tyrion |    97 | MBA    | 888844 |
+|  103 | Sansa  |    91 | BA     |  12000 |
+|  104 | Bran   |    88 | BE     |  55000 |
+|  101 | John   |    84 | BCom   |  25000 |
+|  102 | Rob    |    70 | BSc    |  36000 |
+|  105 | Arya   |    64 | MBA    | 666000 |
++------+--------+-------+--------+--------+
+
+--Max method
+mysql> select max(marks) from Students;
++------------+
+| max(marks) |
++------------+
+|         98 |
++------------+
+1 row in set (0.00 sec)
+
+--Min mehtod
+mysql> select min(marks) from Students;
++------------+
+| min(marks) |
++------------+
+|         64 |
++------------+
+1 row in set (0.00 sec)
+
+--avg method
+mysql> select avg(marks) from Students;
++-------------------+
+| avg(marks)        |
++-------------------+
+| 84.57142857142857 |
++-------------------+
+1 row in set (0.00 sec)
+
+--count method
+mysql> select count(marks) from Students;
++--------------+
+| count(marks) |
++--------------+
+|            7 |
++--------------+
+1 row in set (0.00 sec)
+
+-- limit (limits the ouput till specifiied no. entered)
+mysql> select marks from Students limit 1;
++-------+
+| marks |
++-------+
+|    84 |
++-------+
+
+--Second highest makrs in Students table
+select max(marks) from Students where marks < (select max(marks) from Students);
++------------+
+| max(marks) |
++------------+
+|         97 |
++------------+
+
+--Second lowest makrs in Students table
+mysql> select min(marks) from Students where marks > (select min(marks) from Students);
++------------+
+| min(marks) |
++------------+
+|         70 |
++------------+
+
+--Auto increment
+mysql> create table Customers3(ID int primary key auto_increment, CustomerName varchar(20), Age int);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> desc Customers3;
++--------------+-------------+------+-----+---------+----------------+
+| Field        | Type        | Null | Key | Default | Extra          |
++--------------+-------------+------+-----+---------+----------------+
+| ID           | int         | NO   | PRI | NULL    | auto_increment |
+| CustomerName | varchar(20) | YES  |     | NULL    |                |
+| Age          | int         | YES  |     | NULL    |                |
++--------------+-------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+--Auto increment (Starts from 1)
+mysql> insert into Customers3(CustomerName, Age) values('Customer 1', 22);
+Query OK, 1 row affected (0.01 sec)
+
+mysql>
+mysql> insert into Customers3(CustomerName, Age) values('Customer 2', 23);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from Customers3;
++----+--------------+------+
+| ID | CustomerName | Age  |
++----+--------------+------+
+|  1 | Customer 1   |   22 |
+|  2 | Customer 2   |   23 |
++----+--------------+------+
+2 rows in set (0.00 sec)
+
+--Auto increment (Starts from the number we have specified)
+mysql> truncate Customers3;
+Query OK, 0 rows affected (0.09 sec)
+
+mysql>
+mysql> insert into Customers3 values(1001, 'Customer 1', 32);
+Query OK, 1 row affected (0.01 sec)
+
+mysql>
+mysql> insert into Customers3 values(1002, 'Customer 2', 43);
+Query OK, 1 row affected (0.01 sec)
+
+mysql>
+mysql> insert into Customers3(CustomerName,Age) values('Customer 3', 32);
+Query OK, 1 row affected (0.01 sec)
+
+mysql>
+mysql> insert into Customers3(CustomerName, Age) values('Customer 4', 12);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from Customers3;
++------+--------------+------+
+| ID   | CustomerName | Age  |
++------+--------------+------+
+| 1001 | Customer 1   |   32 |
+| 1002 | Customer 2   |   43 |
+| 1003 | Customer 3   |   32 |
+| 1004 | Customer 4   |   12 |
++------+--------------+------+
+
+--Uppercase
+mysql> select ucase(CustomerName) from Customers3;
++---------------------+
+| ucase(CustomerName) |
++---------------------+
+| CUSTOMER 1          |
+| CUSTOMER 2          |
+| CUSTOMER 3          |
+| CUSTOMER 4          |
++---------------------+
+
+--lowercase
+mysql> select lcase(CustomerName) from Customers3;
++---------------------+
+| lcase(CustomerName) |
++---------------------+
+| customer 1          |
+| customer 2          |
+| customer 3          |
+| customer 4          |
++---------------------+
+
+--Mid() from a specific indexes
+mysql> select mid(CustomerName,2,2) from Customers3;
++-----------------------+
+| mid(CustomerName,2,2) |
++-----------------------+
+| us                    |
+| us                    |
+| us                    |
+| us                    |
++-----------------------+
+
+mysql> select mid(CustomerName,1,4) from Customers3;
++-----------------------+
+| mid(CustomerName,1,4) |
++-----------------------+
+| Cust                  |
+| Cust                  |
+| Cust                  |
+| Cust                  |
++-----------------------+
+
+--Mid using with a String
+mysql> select mid('1234567',2,4);
++--------------------+
+| mid('1234567',2,4) |
++--------------------+
+| 2345               |
++--------------------+
+
+--Length method 
+mysql> select * from Students;
++------+--------+-------+--------+--------+
+| ID   | Name   | Marks | Course | Fees   |
++------+--------+-------+--------+--------+
+|  101 | John   |    84 | BCom   |  25000 |
+|  102 | Rob    |    70 | BSc    |  36000 |
+|  103 | Sansa  |    91 | BA     |  12000 |
+|  104 | Bran   |    88 | BE     |  55000 |
+|  105 | Arya   |    64 | MBA    | 666000 |
+|  106 | Cersi  |    98 | MBBS   | 788800 |
+|  107 | Tyrion |    97 | MBA    | 888844 |
++------+--------+-------+--------+--------+
+
+--Using with column
+mysql> select length(Name) as Name_length from Students;
++-------------+
+| Name_length |
++-------------+
+|           4 |
+|           3 |
+|           5 |
+|           4 |
+|           4 |
+|           5 |
+|           6 |
++-------------+
+
+--Using wih specific row
+mysql> select length(Name) as Name_Length from Students where ID = 104;
++-------------+
+| Name_Length |
++-------------+
+|           4 |
++-------------+
+
+--length using string
+mysql> select length('12345678');
++--------------------+
+| length('12345678') |
++--------------------+
+|                  8 |
++--------------------+
+
+--Round method 
+mysql> select round(232.44);
++---------------+
+| round(232.44) |
++---------------+
+|           232 |
++---------------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql> select round(232.44345, 4);
++---------------------+
+| round(232.44345, 4) |
++---------------------+
+|            232.4435 |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> select round(232.44365, 4);
++---------------------+
+| round(232.44365, 4) |
++---------------------+
+|            232.4437 |
++---------------------+
+
+--Now method(Returns tcurrent date and time)
+mysql> select now();
++---------------------+
+| now()               |
++---------------------+
+| 2020-02-29 00:31:19 |
++---------------------+
+
+--Functions
+
+--Function without any parameters
+delimiter $  --Setting delimiter 
+
+create function new2() 
+returns double 
+begin 
+return 3.14; 
+end; 
+$
+
+mysql> select new2();
+    -> $
++--------+
+| new2() |
++--------+
+|   3.14 |
++--------+
+
+--show functions
+show function status where db ='sql_pracitce'
+
+--method with 2 parameters
+mysql> create function Addition1(num1 int, num2 int)
+    -> returns double
+    -> begin
+    -> declare num3 int;
+    -> set num3 = num1+ num2;
+    -> return num3;
+    -> end;
+    -> $
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> select Addition1(33,55); $
++------------------+
+| Addition1(33,55) |
++------------------+
+|               88 |
++------------------+
+
+--mwthod 2
+create function isEven(num int)
+    -> returns varchar(40)
+    -> begin
+    -> if(num%2=0) then
+    -> return 'Entered number is even';
+    -> else
+    -> return 'Entered number is odd';
+    -> end if;
+    -> end;
+    -> $
+
+    mysql> select isEven1(44);
+    -> $
++------------------------+
+| isEven1(44)            |
++------------------------+
+| Entered number is even |
++------------------------+
+
+--Delete function
+drop function new2;
+    -> $
+Query OK, 0 rows affected (0.02 sec)
+
+--Procedure 
+--(Prcodedure for inserting values in the table)
+mysql> create procedure Person3Insert(A int, B varchar(20), C varchar(20), D int)
+    -> begin
+    -> insert into Person3(ID, Fname, Lname, Age) values(A,B,C,D);
+    -> end;
+    -> $
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call Person3insert(102, 'User 2', 'Lname 2', 24);
+    -> $
+Query OK, 1 row affected (0.01 sec)
+
+mysql> call Person3insert(103, 'User 3', 'Lname 3', 25);
+    -> $
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from Person3;
+    -> $
++-----+--------+---------+------+
+| ID  | Fname  | Lname   | Age  |
++-----+--------+---------+------+
+| 101 | User 1 | Lname 1 |   22 |
+| 101 | User 1 | Lname 1 |   22 |
+| 102 | User 2 | Lname 2 |   24 |
+| 103 | User 3 | Lname 3 |   25 |
++-----+--------+---------+------+
+
+--(Procedure for deleting rows  int table)
+
+mysql> create procedure Person3Delete(id1 int)
+    -> begin
+    -> delete from Person3 where ID =id1;
+    -> end;
+    -> $
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call Person3Delete(103);
+    -> $
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from Person3;
+    -> $
++-----+--------+---------+------+
+| ID  | Fname  | Lname   | Age  |
++-----+--------+---------+------+
+| 101 | User 1 | Lname 1 |   22 |
+| 101 | User 1 | Lname 1 |   22 |
+| 102 | User 2 | Lname 2 |   24 |
++-----+--------+---------+------+
+
+--(Procedure for updating rows)
+create procedure Person3Update(i1 int, c1 varchar(20))
+begin
+update Person3 set Fname =c1 where ID = i1;
+end;
+$ 
+
+mysql> call Person3Update(102, 'New CUst2');
+    -> $
+Query OK, 1 row affected (0.01 sec)
+
+mysql>
+mysql> select * from Person3;
+    -> $
++-----+-----------+---------+------+
+| ID  | Fname     | Lname   | Age  |
++-----+-----------+---------+------+
+| 101 | User 1    | Lname 1 |   22 |
+| 101 | User 1    | Lname 1 |   22 |
+| 102 | New CUst2 | Lname 2 |   24 |
++-----+-----------+---------+------+
+
+--Triggers
+--Create 2 classes TrigegerTest and TriggerTest_Backup
+mysql> create table TriggerTest(ID int, Name varchar(20), Age int);
+    -> $
+Query OK, 0 rows affected (0.08 sec)
+mysql> create table TriggerTest_backup as(select * from TriggerTest);
+    -> $
+
+--creating triggers
+--Trigger on insert
+mysql> create trigger TriggerTestIn
+    -> after
+    -> insert on TriggerTest
+    -> for each row
+    -> begin
+    -> insert into TriggerTest_backup values(new.ID, new.Name, new.Age);
+    -> end;
+    -> $
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into TriggerTest values(1,'Name 1', 23);
+    -> $
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from TriggerTest;
+    -> $
++------+--------+------+
+| ID   | Name   | Age  |
++------+--------+------+
+|    1 | Name 1 |   23 |
++------+--------+------+
+1 row in set (0.00 sec)
+
+mysql> select * from TriggerTest_backup;
+    -> $
++------+--------+------+
+| ID   | Name   | Age  |
++------+--------+------+
+|    1 | Name 1 |   23 |
++------+--------+------+
+1 row in set (0.00 sec)
+
+--Trigger to update table
+
+create trigger TriggerTestUp
+after
+update on TriggerTest
+for each row
+begin
+insert into TriggerTest_Backup values(new.ID, new.Name, new.Age);
+end;
+$
+
+    mysql> select * from Triggertest;
+    -> $
++------+--------+------+
+| ID   | Name   | Age  |
++------+--------+------+
+|    1 | Name 1 |   23 |
+|    2 | Name 2 |   23 |
+|    3 | Name 3 |   23 |
++------+--------+------+
+3 rows in set (0.00 sec)
+
+mysql> select * from Triggertest_backup;
+    -> $
++------+--------+------+
+| ID   | Name   | Age  |
++------+--------+------+
+|    1 | Name 1 |   23 |
+|    2 | Name 2 |   23 |
+|    3 | Name 3 |   23 |
++------+--------+------+
+3 rows in set (0.00 sec)
+
+mysql> update Triggertest set Name = New name  where ID =3;
+    -> $
+
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from Triggertest;
+    -> $
++------+----------+------+
+| ID   | Name     | Age  |
++------+----------+------+
+|    1 | Name 1   |   23 |
+|    2 | Name 2   |   23 |
+|    3 | New name |   23 |
++------+----------+------+
+3 rows in set (0.00 sec)
+
+mysql> select * from Triggertest_backup;
+    -> $
++------+----------+------+
+| ID   | Name     | Age  |
++------+----------+------+
+|    1 | Name 1   |   23 |
+|    2 | Name 2   |   23 |
+|    3 | Name 3   |   23 |
+|    3 | New name |   23 |
++------+----------+------+
+
+--Drop tiggers
+mysql> drop trigger TriggerTestUP;
+    -> $
+Query OK, 0 rows affected (0.01 sec)
